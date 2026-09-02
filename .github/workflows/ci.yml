@@ -106,6 +106,15 @@ jobs:
           dotnet build -c Debug
           dotnet build -c Release
 
+      - name: Run Tests
+        shell: bash
+        run: dotnet test -p:SkipNatives=true
+
+      # Build all cross-platform natives only after the tests: at test time
+      # only the host-arch runtime exists in bin/, so the flat libflecs copy
+      # in the test output is the correct architecture. Building every RID
+      # earlier put both osx-x64 and osx-arm64 dylibs into runtimes/, the
+      # flat copy kept x86_64, and tests crashed on arm64 runners.
       - name: Build Natives
         shell: bash
         if: matrix.os == 'macos-14'
@@ -141,18 +150,6 @@ jobs:
         if: matrix.os == 'macos-14'
         shell: bash
         run: find src -name '*.dylib' -exec codesign --force --sign - {} +
-
-      - name: Run Tests
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            echo "--- dylib inventory ---"
-            find src -name '*.dylib' -not -path '*/.zig-cache/*' -exec file {} \;
-            echo "--- test output ---"
-            ls -la src/Flecs.NET.Tests/bin/Debug/net10.0/ | grep -i flecs || echo "no flecs in test output"
-            ls -la src/Flecs.NET.Tests/bin/Debug/net10.0/runtimes/ 2>/dev/null || echo "no runtimes dir"
-          fi
-          dotnet test -p:SkipNatives=true
 
       - name: Pack Nuget Packages
         shell: bash
