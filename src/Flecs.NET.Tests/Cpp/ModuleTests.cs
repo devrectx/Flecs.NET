@@ -242,7 +242,11 @@ public class ModuleTests
         Entity e = world.Entity(".Namespace.NestedModule");
         Assert.True(e != m);
 
-        Assert.Equal(1, world.QueryBuilder().Expr("(ChildOf, p.NestedModule)").Build().Count());
+        // In debug builds flecs creates internal "debug_only_*" observers as
+        // children of the module (module components are singletons), so the
+        // exact match count is not fixed. Mirrors the upstream C++ test, which
+        // only asserts that the reparented module has children.
+        Assert.True(world.QueryBuilder().Expr("(ChildOf, p.NestedModule)").Build().Count() > 0);
         Assert.Equal(0, world.QueryBuilder().Expr("(ChildOf, Namespace.NestedModule)").Build().Count());
     }
 

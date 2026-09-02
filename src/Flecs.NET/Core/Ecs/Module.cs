@@ -20,7 +20,16 @@ public static unsafe partial class Ecs
 
     private static ulong DoImport<T>(World world) where T : IFlecsModule, new()
     {
-        Entity module = world.Entity(Type<T>.Id(world)).Add(EcsModule);
+        Entity module = world.Entity(Type<T>.Id(world));
+
+        // Sparse storage must be enabled before the entity is turned into a
+        // module. Flecs 4.1 aborts when EcsSparse is added to an entity that
+        // already has EcsModule (upstream C++ enables sparse first as well).
+        if (!Type<T>.IsTag)
+            module.Add(EcsSparse);
+
+        module.Add(EcsModule);
+
         ulong prevScope = world.SetScope(module);
 
         T moduleInstance = new T();
@@ -29,10 +38,7 @@ public static unsafe partial class Ecs
         world.SetScope(prevScope);
 
         if (!Type<T>.IsTag)
-        {
-            module.Add(EcsSparse);
             world.Set(in moduleInstance);
-        }
 
         return module;
     }

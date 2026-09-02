@@ -2991,9 +2991,11 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
         {
             Entity next = current.Parent();
 
-            ecs_iter_t it = ecs_each_id(Handle, Pair(Ecs.ChildOf, current));
-
-            if (!ecs_iter_is_true(&it))
+            // In debug builds flecs creates internal observers (named
+            // "debug_only_*") as children of singleton components. Those
+            // shouldn't keep an otherwise empty parent alive. Only preserve
+            // parents that still have real user content.
+            if (!HasChildren(current, skipFlecsInternal: true))
             {
                 current.Destruct();
                 SetVersion(current);
@@ -3003,6 +3005,37 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
         }
 
         return Entity(result);
+    }
+
+    /// <summary>
+    ///     Checks if an entity has children, optionally ignoring children that
+    ///     were created by flecs itself (such as the singleton invariant
+    ///     observers that debug builds create under singleton components).
+    /// </summary>
+    private bool HasChildren(Entity entity, bool skipFlecsInternal)
+    {
+        ecs_iter_t it = ecs_each_id(Handle, Pair(Ecs.ChildOf, entity));
+
+        while (ecs_each_next(&it))
+        {
+            for (int i = 0; i < it.count; i++)
+            {
+                Entity child = Entity(it.entities[i]);
+
+                if (skipFlecsInternal && IsFlecsInternalEntity(child))
+                    continue;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsFlecsInternalEntity(Entity entity)
+    {
+        string? name = entity.Name();
+        return name != null && name.StartsWith("debug_only_", StringComparison.Ordinal);
     }
 
     /// <summary>
