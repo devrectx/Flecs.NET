@@ -1627,8 +1627,17 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         for (int i = 0; i < _termCount; i++)
         {
             ecs_term_t term = _desc.terms[i];
-            if (Ecs.TypeIdIs<T>(World, term.id) || Ecs.TypeIdIs<T>(World, Ecs.Pair(term.first.id, term.second.id)))
+
+            if (Ecs.TypeIdIs<T>(World, term.id))
                 return ref TermAt(i);
+
+            // Terms that store a pair id in the union 'id' field don't set
+            // first/second, so only check the pair form when it's populated.
+            if (term.first.id != 0 || term.second.id != 0)
+            {
+                if (Ecs.TypeIdIs<T>(World, Ecs.Pair(term.first.id, term.second.id)))
+                    return ref TermAt(i);
+            }
         }
         Ecs.Error("Term not found.");
         return ref this;
@@ -1659,8 +1668,23 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder TermAt<T>(int termIndex)
     {
-        Ecs.Assert(Ecs.TypeIdIs<T>(World, CurrentTerm.id) || Ecs.TypeIdIs<T>(World, Ecs.Pair(CurrentTerm.first.id, CurrentTerm.second.id)), "Term type does not match.");
+        Ecs.Assert(IsTermType<T>(), "Term type does not match.");
         return ref TermAt(termIndex);
+    }
+
+    private bool IsTermType<T>()
+    {
+        ecs_term_t term = CurrentTerm;
+
+        if (Ecs.TypeIdIs<T>(World, term.id))
+            return true;
+
+        // Terms that store a pair id in the union 'id' field don't set
+        // first/second, so only check the pair form when it's populated.
+        if (term.first.id != 0 || term.second.id != 0)
+            return Ecs.TypeIdIs<T>(World, Ecs.Pair(term.first.id, term.second.id));
+
+        return false;
     }
 
     /// <summary>
