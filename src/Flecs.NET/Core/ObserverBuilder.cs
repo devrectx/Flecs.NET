@@ -427,7 +427,17 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         {
             Ecs.Assert(_eventCount != 0, "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
             Ecs.Assert(ptr->query.terms[0] != default || ptr->query.expr != null, "Observers require at least 1 term.");
-            return new Observer(World, ecs_observer_init(World, ptr));
+
+            // If the entity is already an observer (for example when a builder
+            // is created with a name that resolves to an existing observer)
+            // update it in place instead of creating a new one. Flecs 4.1
+            // aborts when ecs_observer_init() is called on an entity that is
+            // already an observer.
+            ulong observer = Desc.entity != 0 && ecs_has_id(World, Desc.entity, EcsObserver)
+                ? ecs_observer_update(World, Desc.entity, ptr)
+                : ecs_observer_init(World, ptr);
+
+            return new Observer(World, observer);
         }
     }
 
