@@ -16,6 +16,13 @@ public static unsafe partial class Ecs
         /// <param name="world"></param>
         public readonly void InitModule(World world)
         {
+            // The stats module references unit quantities (e.g. EcsBytes) from the
+            // units module when registering its memory reflection types. Ensure the
+            // units module is imported into this world first so those unit entities
+            // are alive in this world, mirroring the upstream C++ module wrapper
+            // (flecs::stats imports flecs::units before FlecsStatsImport).
+            Ecs.Import<Ecs.Units>(world);
+
             FlecsStatsImport(world);
         }
 
