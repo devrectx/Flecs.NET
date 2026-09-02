@@ -1,4 +1,3 @@
 [submodule "native/flecs"]
 	path = native/flecs
 	url = https://github.com/SanderMertens/flecs
-	branch = master
