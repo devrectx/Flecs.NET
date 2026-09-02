@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Flecs.NET.Core.BindingContext;
@@ -2950,7 +2950,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
             return ref this;
         }
 
-        void* ptr = ecs_ensure_id(World, Id, e);
+        ecs_type_info_t* info = ecs_get_type_info(World, e);
+        void* ptr = ecs_ensure_id(World, Id, e, info->size);
         Ecs.Assert(ptr != null, nameof(ECS_INTERNAL_ERROR));
 
         using NativeString nativeJson = (NativeString)json;
@@ -3128,7 +3129,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public void* EnsurePtr(ulong id)
     {
-        return ecs_ensure_id(World, Id, id);
+        ecs_type_info_t* info = ecs_get_type_info(World, id);
+        return ecs_ensure_id(World, Id, id, info->size);
     }
 
     /// <summary>
@@ -3150,7 +3152,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     public T* EnsurePtr<T>() where T : unmanaged
     {
         Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-        return (T*)ecs_ensure_id(World, Id, Type<T>.Id(World));
+        return (T*)ecs_ensure_id(World, Id, Type<T>.Id(World), Type<T>.Size);
     }
 
     /// <summary>
@@ -3237,7 +3239,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     public ref T Ensure<T>()
     {
         Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-        return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, Type<T>.Id(World)));
+        return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, Type<T>.Id(World), Type<T>.Size));
     }
 
     /// <summary>
