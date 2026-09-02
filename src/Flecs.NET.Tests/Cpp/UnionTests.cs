@@ -12,7 +12,7 @@ public class UnionTests
 
         Entity standing = world.Entity("Standing");
         Entity walking = world.Entity("Walking");
-        Entity movement = world.Entity().Add(Ecs.Union);
+        Entity movement = world.Entity().Add(Ecs.DontFragment).Add(Ecs.Exclusive);
 
         Entity e = world.Entity()
             .Add(movement, standing);
@@ -34,7 +34,7 @@ public class UnionTests
 
         Entity standing = world.Entity("Standing");
         world.Entity("Walking");
-        Entity movement = world.Entity().Add(Ecs.Union);
+        Entity movement = world.Entity().Add(Ecs.DontFragment).Add(Ecs.Exclusive);
 
         Entity e = world.Entity()
             .Add(movement, standing);
@@ -48,7 +48,7 @@ public class UnionTests
     {
         using World world = World.Create();
 
-        world.Component<Movement>().Add(Ecs.Union);
+        world.Component<Movement>().Add(Ecs.DontFragment).Add(Ecs.Exclusive);
 
         Entity e = world.Entity().Add<Movement, Standing>();
         Assert.True((e.Has<Movement, Standing>()));
@@ -64,7 +64,7 @@ public class UnionTests
     {
         using World world = World.Create();
 
-        world.Component<Movement>().Add(Ecs.Union);
+        world.Component<Movement>().Add(Ecs.DontFragment).Add(Ecs.Exclusive);
 
         Entity e = world.Entity().Add<Movement, Standing>();
         Assert.True((e.Has<Movement, Standing>()));
@@ -80,7 +80,7 @@ public class UnionTests
     {
         using World world = World.Create();
 
-        world.Component<Movement>().Add(Ecs.Union);
+        world.Component<Movement>().Add(Ecs.DontFragment).Add(Ecs.Exclusive);
 
         Entity e = world.Entity().Add<Movement, Standing>();
         Assert.True(e.Has<Movement>(Ecs.Wildcard));
@@ -101,7 +101,7 @@ public class UnionTests
         e.Remove<Movement>(Ecs.Wildcard);
         Assert.True(!e.Has<Movement>(Ecs.Wildcard));
         Assert.True((!e.Has<Movement, Walking>()));
-        Assert.True(e.Table() != table);
+        Assert.True(e.Table() == table);
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class UnionTests
     {
         using World world = World.Create();
 
-        world.Component<Color>().Add(Ecs.Union);
+        world.Component<Color>().Add(Ecs.DontFragment).Add(Ecs.Exclusive);
 
         Entity e = world.Entity().Add(Color.Red);
         Assert.True(e.Has(Color.Red));
@@ -138,6 +138,6 @@ public class UnionTests
         Assert.True(!e.Has(Color.Green));
         Assert.True(!e.Has(Color.Blue));
         Assert.True(!e.Has<Color>(Ecs.Wildcard));
-        Assert.True(e.Table() != table);
+        Assert.True(e.Table() == table);
     }
 }
