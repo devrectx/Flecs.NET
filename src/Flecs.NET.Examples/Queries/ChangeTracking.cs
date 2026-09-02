@@ -6,6 +6,7 @@
 // prefabs to store a single dirty state for multiple entities.
 
 using Flecs.NET.Core;
+using static Flecs.NET.Bindings.flecs;
 
 // Components
 file record struct Position(float X, float Y);
@@ -21,12 +22,10 @@ public static class Queries_ChangeTracking
         world.Component<Dirty>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         // Create a query that just reads a component. We'll use this query for
-        // change tracking. Change tracking for a query is automatically enabled
-        // when Query.Changed() is called.
-        // Each query has its own private dirty state which is reset only when the
-        // query is iterated.
+        // change tracking. Each query has its own private dirty state which is
+        // reset only when the query is iterated.
         using Query qRead = world.QueryBuilder()
-            .Cached()
+            .QueryFlags(EcsQueryDetectChanges)
             .With<Position>().In()
             .Build();
 
