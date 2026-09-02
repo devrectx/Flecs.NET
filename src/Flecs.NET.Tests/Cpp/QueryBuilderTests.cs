@@ -2271,11 +2271,13 @@ public unsafe class QueryBuilderTests
         using Query q = world.QueryBuilder()
             .With<Tag23>()
             .GroupBy(world.Id<Tag23>(), GroupByFirstId)
+            .QueryFlags(EcsQueryGroupByOrdered)
             .Build();
 
         using Query qReverse = world.QueryBuilder()
             .With<Tag23>()
             .GroupBy(world.Id<Tag23>(), GroupByFirstIdNegated)
+            .QueryFlags(EcsQueryGroupByOrdered)
             .Build();
 
         Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();
@@ -2336,11 +2338,13 @@ public unsafe class QueryBuilderTests
         using Query q = world.QueryBuilder()
             .With<Tag23>()
             .GroupBy<Tag23>(GroupByFirstId)
+            .QueryFlags(EcsQueryGroupByOrdered)
             .Build();
 
         using Query qReverse = world.QueryBuilder()
             .With<Tag23>()
             .GroupBy<Tag23>(GroupByFirstIdNegated)
+            .QueryFlags(EcsQueryGroupByOrdered)
             .Build();
 
         Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();

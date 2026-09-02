@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.CSharp.Core;
 
@@ -20,11 +21,13 @@ public class QueryBuilderTests
         using Query q = world.QueryBuilder()
             .With<Tag3>()
             .GroupBy<Tag3>(GroupByFirstId)
+            .QueryFlags(EcsQueryGroupByOrdered)
             .Build();
 
         using Query qReverse = world.QueryBuilder()
             .With<Tag3>()
             .GroupBy<Tag3>(GroupByFirstIdNegated)
+            .QueryFlags(EcsQueryGroupByOrdered)
             .Build();
 
         Entity e3 = world.Entity().Add<Tag3>().Add<Tag2>();
