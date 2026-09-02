@@ -137,6 +137,11 @@ jobs:
           dotnet build -c Release -r android-arm64
           dotnet build -c Release -r android-x64
 
+      - name: Codesign Native Libraries
+        if: matrix.os == 'macos-14'
+        shell: bash
+        run: find src -name '*.dylib' -exec codesign --force --sign - {} +
+
       - name: Run Tests
         shell: bash
         run: dotnet test -p:SkipNatives=true
