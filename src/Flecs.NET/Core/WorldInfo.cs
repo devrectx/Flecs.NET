@@ -32,16 +32,6 @@ public readonly unsafe struct WorldInfo : IEquatable<WorldInfo>
     public ulong LastComponentId => Handle->last_component_id;
 
     /// <summary>
-    ///     First allowed entity id.
-    /// </summary>
-    public ulong MinId => Handle->min_id;
-
-    /// <summary>
-    ///     Last allowed entity id.
-    /// </summary>
-    public ulong MaxId => Handle->max_id;
-
-    /// <summary>
     ///     Raw delta time. (No time scaling)
     /// </summary>
     public float DeltaTimeRaw => Handle->delta_time_raw;
@@ -137,14 +127,14 @@ public readonly unsafe struct WorldInfo : IEquatable<WorldInfo>
     public long PipelineBuildCountTotal => Handle->pipeline_build_count_total;
 
     /// <summary>
-    ///     Total number of systems ran in last frame.
+    ///     Total number of systems ran.
     /// </summary>
-    public long SystemsRanFrame => Handle->systems_ran_frame;
+    public long SystemsRanTotal => Handle->systems_ran_total;
 
     /// <summary>
-    ///     Total number of times observer was invoked.
+    ///     Total number of times observers were invoked.
     /// </summary>
-    public long ObserversRanFrame => Handle->observers_ran_frame;
+    public long ObserversRanTotal => Handle->observers_ran_total;
 
     /// <summary>
     ///     Number of tag (No data) ids in the world.

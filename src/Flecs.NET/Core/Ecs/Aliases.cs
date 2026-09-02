@@ -176,11 +176,6 @@ public static partial class Ecs
     public static ref ulong Observer => ref EcsObserver;
 
     /// <summary>
-    ///     Reference to <see cref="EcsPrivate"/>.
-    /// </summary>
-    public static ref ulong Private => ref EcsPrivate;
-
-    /// <summary>
     ///     Reference to <see cref="EcsModule"/>.
     /// </summary>
     public static ref ulong Module => ref EcsModule;
@@ -450,11 +445,6 @@ public static partial class Ecs
     ///     Reference to <see cref="EcsSparse"/>.
     /// </summary>
     public static ref ulong Sparse => ref EcsSparse;
-
-    /// <summary>
-    ///     Reference to <see cref="EcsUnion"/>.
-    /// </summary>
-    public static ref ulong Union => ref EcsUnion;
 
     // Built-in predicates for comparing entity ids in queries.
 

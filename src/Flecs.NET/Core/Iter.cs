@@ -408,7 +408,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     /// <returns></returns>
     public ulong GroupId()
     {
-        return Handle->group_id;
+        return ecs_iter_get_group(Handle);
     }
 
     /// <summary>

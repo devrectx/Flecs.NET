@@ -345,16 +345,16 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="max"></param>
     public void SetEntityRange(ulong min, ulong max)
     {
-        ecs_set_entity_range(Handle, min, max);
+        ecs_entity_range_t* range = ecs_entity_range_new(Handle, (uint)min, (uint)max);
+        ecs_entity_range_set(Handle, range);
     }
 
     /// <summary>
-    ///     Enforce that operations cannot modify entities outside of range.
+    ///     Get the currently active entity id range, or <see langword="null"/> if none is set.
     /// </summary>
-    /// <param name="enabled"></param>
-    public void EnableRangeCheck(bool enabled = true)
+    public ecs_entity_range_t* EntityRange
     {
-        ecs_enable_range_check(Handle, enabled);
+        get { return ecs_entity_range_get(Handle); }
     }
 
     /// <summary>
@@ -3211,7 +3211,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
         using NativeString nativeName = (NativeString)name;
         using NativeString nativeStr = (NativeString)str;
 
-        return ecs_script_run(Handle, nativeName, nativeStr);
+        return ecs_script_run(Handle, nativeName, nativeStr, null);
     }
 
     /// <summary>
