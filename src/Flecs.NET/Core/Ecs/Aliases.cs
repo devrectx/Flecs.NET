@@ -312,6 +312,11 @@ public static partial class Ecs
     public static ref ulong Exclusive => ref EcsExclusive;
 
     /// <summary>
+    ///     Reference to <see cref="EcsDontFragment"/>.
+    /// </summary>
+    public static ref ulong DontFragment => ref EcsDontFragment;
+
+    /// <summary>
     ///     Reference to <see cref="EcsAcyclic"/>.
     /// </summary>
     public static ref ulong Acyclic => ref EcsAcyclic;
