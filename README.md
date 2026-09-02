@@ -4,9 +4,10 @@
 <div align="center">
 
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/SanderMertens/flecs/blob/master/LICENSE)
-[![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Flecs.NET.Release?style=for-the-badge&color=blue)](https://www.nuget.org/packages/Flecs.NET.Release)
+[![Release](https://img.shields.io/github/v/release/devrectx/Flecs.NET?style=for-the-badge&color=blue)](https://github.com/devrectx/Flecs.NET/releases)
+[![flecs 4.1.6](https://img.shields.io/badge/flecs-4.1.6-blue?style=for-the-badge)](https://github.com/devrectx/Flecs.NET/releases)
 
-[Docs](https://www.flecs.dev/flecs/) · [Examples](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Examples) · [Discord](https://discord.gg/BEzP5Rgrrp)
+[Docs](https://www.flecs.dev/flecs/) · [Examples](https://github.com/devrectx/Flecs.NET/tree/main/src/Flecs.NET.Examples) · [Discord](https://discord.gg/BEzP5Rgrrp)
 
 </div>
 
@@ -52,24 +53,11 @@ public record struct Velocity(float X, float Y);
 - Packaged with Zig for dependency free cross-compilation everywhere
 
 ## NuGet
-You can download the nuget package and use **Flecs.NET** right away!
+The `Flecs.NET.*` packages on [nuget.org](https://www.nuget.org/packages/Flecs.NET.Release) are published and maintained by the upstream repository and currently track flecs `4.0.4`; they are not updated by this fork.
 
-**Flecs.NET (Wrapper + Bindings + Native Libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Debug/)**
-```console
-dotnet add PROJECT package Flecs.NET.Release --version *-*
-```
+This repository's packages (flecs **4.1.6**, .NET 10) are published to the [GitHub Package registry](#github-package-registry) below under the same `Flecs.NET.*` IDs. Once the GitHub feed is added as a package source (see below), the references in this section resolve to the latest 4.1.6 build instead of the upstream 4.0.4 packages.
 
-**Flecs.NET.Bindings (Bindings + Native Libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**
-```console
-dotnet add PROJECT package Flecs.NET.Bindings.Release --version *-*
-```
-
-**Flecs.NET.Native (Native Libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**
-```console
-dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
-```
-
-**Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget. It is recommended that the debug packages be used when developing as they include checks for incorrect usage of the API.
+**Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages. It is recommended that the debug packages be used when developing as they include checks for incorrect usage of the API.
 To include both of them in your project based on your build configuration, use the package references below. The latest stable or prerelease versions will be added to your project.
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -100,19 +88,19 @@ To include both of them in your project based on your build configuration, use t
 ```
 
 ## GitHub Package Registry
-For more up-to-date packages, development builds are available on the [GitHub package registry](https://github.com/BeanCheeseBurrito?tab=packages&repo_name=Flecs.NET). Packages are automatically uploaded on every commit to the main branch.
+The [GitHub package registry](https://github.com/devrectx?tab=packages&repo_name=Flecs.NET) hosts this repository's packages (flecs **4.1.6**). Stable `4.1.6` packages are uploaded when a release is published, and `4.1.6-build.*` development builds are uploaded on every commit to the main branch.
 
-To access development builds from your project, you first need to create a GitHub personal access token with the ``read:packages`` permission. (See [Creating a personal access token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic))
+To access the packages from your project, you first need to create a GitHub personal access token with the ``read:packages`` permission. (See [Creating a personal access token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic))
 
 Once you have created a personal access token, run the following command to add the GitHub feed as a new package source. Replace ``YOUR_GITHUB_USERNAME`` with your GitHub username and ``YOUR_GITHUB_TOKEN`` with your personal access token.
 ```bash
-dotnet nuget add source --name "flecs.net" --username "YOUR_GITHUB_USERNAME" --password "YOUR_GITHUB_TOKEN" --store-password-in-clear-text "https://nuget.pkg.github.com/BeanCheeseBurrito/index.json"
+dotnet nuget add source --name "flecs.net" --username "YOUR_GITHUB_USERNAME" --password "YOUR_GITHUB_TOKEN" --store-password-in-clear-text "https://nuget.pkg.github.com/devrectx/index.json"
 ```
 
-You can now reference any package from the [GitHub feed](https://github.com/BeanCheeseBurrito?tab=packages&repo_name=Flecs.NET)!
+You can now reference any package from the [GitHub feed](https://github.com/devrectx?tab=packages&repo_name=Flecs.NET)!
 
 ```console
-dotnet add PROJECT package Flecs.NET.Release --version *-build.*
+dotnet add PROJECT package Flecs.NET.Release --version 4.1.6*
 ```
 
 ```xml
@@ -123,14 +111,14 @@ dotnet add PROJECT package Flecs.NET.Release --version *-build.*
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Flecs.NET.Debug" Version="*-build.*"/>
+        <PackageReference Include="Flecs.NET.Debug" Version="4.1.6*"/>
     </ItemGroup>
 </Project>
 ```
 ___
 By default, the GitHub feed will be added to your global ``nuget.config`` file and can be referenced by any project on your machine. If wish to add the feed to a single project/solution, create a ``nuget.config`` file at the root of your project/solution directory and run the following command with the ``--configfile`` option.
 ```bash
-dotnet nuget add source --configfile "./nuget.config" --name "flecs.net" --username "YOUR_GITHUB_USERNAME" --password "YOUR_GITHUB_TOKEN" --store-password-in-clear-text "https://nuget.pkg.github.com/BeanCheeseBurrito/index.json"
+dotnet nuget add source --configfile "./nuget.config" --name "flecs.net" --username "YOUR_GITHUB_USERNAME" --password "YOUR_GITHUB_TOKEN" --store-password-in-clear-text "https://nuget.pkg.github.com/devrectx/index.json"
 ```
 To remove the GitHub feed from your NuGet package sources, run the following command.
 ```bash
@@ -139,7 +127,7 @@ dotnet nuget remove source "flecs.net"
 GitHub Actions workflows can be authenticated using the ``GITHUB_TOKEN`` secret.
 ```yaml
 - name: Add GitHub source
-  run: dotnet nuget add source --name "flecs.net" --username "USERNAME" --password "${{ secrets.GITHUB_TOKEN }}" --store-password-in-clear-text "https://nuget.pkg.github.com/BeanCheeseBurrito/index.json"
+  run: dotnet nuget add source --name "flecs.net" --username "USERNAME" --password "${{ secrets.GITHUB_TOKEN }}" --store-password-in-clear-text "https://nuget.pkg.github.com/devrectx/index.json"
 ```
 > [!WARNING]
 > Development feed packages may be deleted without warning to free up space.
@@ -157,7 +145,7 @@ dotnet run --project src/Flecs.NET.Examples --property:Example=Entities_Basics
 ### Clone the repo
 Clone the repo and it's submodules.
 ```console
-git clone --recursive https://github.com/BeanCheeseBurrito/Flecs.NET.git
+git clone --recursive https://github.com/devrectx/Flecs.NET.git
 cd Flecs.NET
 ```
 ### Restore dependencies
@@ -188,12 +176,12 @@ Reference the project and import the native libraries. You should now be able to
 ```
 
 ### Running the bindings generator
-Low-level bindings to the flecs C API are pre-generated and included in the [Flecs.NET.Bindings](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Bindings) project by default. If needed, you can run the following command to regenerate the bindings file.
+Low-level bindings to the flecs C API are pre-generated and included in the [Flecs.NET.Bindings](https://github.com/devrectx/Flecs.NET/tree/main/src/Flecs.NET.Bindings) project by default. If needed, you can run the following command to regenerate the bindings file.
 ```console
 dotnet run --project src/Flecs.NET.Bindgen
 ```
 ### Running the code generator
-**Flecs.NET** relies on code generation to avoid manual code duplication. If any changes are made to the [Flecs.NET.Codegen](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Codegen) project, you can run the following command to rerun the code generators. The generated files will be output to this [folder](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET/Generated).
+**Flecs.NET** relies on code generation to avoid manual code duplication. If any changes are made to the [Flecs.NET.Codegen](https://github.com/devrectx/Flecs.NET/tree/main/src/Flecs.NET.Codegen) project, you can run the following command to rerun the code generators. The generated files will be output to this [folder](https://github.com/devrectx/Flecs.NET/tree/main/src/Flecs.NET/Generated).
 ```console
 dotnet run --project src/Flecs.NET.Codegen
 ```
