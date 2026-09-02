@@ -165,7 +165,6 @@ jobs:
       - name: Push NuGet Packages
         if: >
           matrix.os == 'macos-latest' &&
-          github.repository_owner == 'BeanCheeseBurrito' &&
           (
             (github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true') ||
             (github.event_name == 'push' && github.ref == 'refs/heads/main')
