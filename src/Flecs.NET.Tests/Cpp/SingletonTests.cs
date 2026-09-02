@@ -119,10 +119,16 @@ public unsafe class SingletonTests
     {
         using World world = World.Create();
 
+        // Flecs 4.1 replaced the legacy "$" singleton syntax with the
+        // EcsSingleton trait: a component marked as singleton may only be
+        // added to itself, and a plain term then matches the component
+        // entity that stores the singleton value.
+        world.Component<Position>().Add(Ecs.Singleton);
+
         world.Set(new Position(10, 20));
 
         world.System()
-            .Expr("[inout] Position($)")
+            .Expr("Position")
             .Run((Iter it) =>
             {
                 while (it.Next())

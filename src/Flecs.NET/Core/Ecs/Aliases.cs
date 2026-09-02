@@ -181,6 +181,11 @@ public static partial class Ecs
     public static ref ulong Module => ref EcsModule;
 
     /// <summary>
+    ///     Reference to <see cref="EcsSingleton"/>.
+    /// </summary>
+    public static ref ulong Singleton => ref EcsSingleton;
+
+    /// <summary>
     ///     Reference to <see cref="EcsPrefab"/>.
     /// </summary>
     public static ref ulong Prefab => ref EcsPrefab;
