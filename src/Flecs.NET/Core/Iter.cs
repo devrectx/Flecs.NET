@@ -538,9 +538,10 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal UntypedField GetUntypedField(int index)
     {
+        nint size = ecs_field_size(Handle, (byte)index);
         return new UntypedField(
-            ecs_field_w_size(Handle, 0, (byte)index),
-            (int)ecs_field_size(Handle, (byte)index),
+            size != 0 ? ecs_field_w_size(Handle, size, (byte)index) : null,
+            (int)size,
             ecs_field_is_self(Handle, (byte)index) ? Handle->count : 1
         );
     }
@@ -548,9 +549,10 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal UntypedField GetUntypedFieldAt(int index, int row)
     {
+        nint size = ecs_field_size(Handle, (byte)index);
         return new UntypedField(
-            ecs_field_at_w_size(Handle, 0, (byte)index, row),
-            (int)ecs_field_size(Handle, (byte)index),
+            size != 0 ? ecs_field_at_w_size(Handle, size, (byte)index, row) : null,
+            (int)size,
             1
         );
     }
