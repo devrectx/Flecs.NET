@@ -36,7 +36,7 @@ public record struct Velocity(float X, float Y);
 
 ## Overview
 **Flecs.NET - High-level C# port of the C++ wrapper**
-- Modern .NET 9
+- Modern .NET 10
 - Near feature parity with the C++ API
 - Struct-based API with minimal GC interaction
 - Supports both unmanaged and managed types as components
@@ -75,7 +75,7 @@ To include both of them in your project based on your build configuration, use t
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -119,7 +119,7 @@ dotnet add PROJECT package Flecs.NET.Release --version *-build.*
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -178,7 +178,7 @@ Reference the project and import the native libraries. You should now be able to
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
