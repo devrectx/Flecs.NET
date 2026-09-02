@@ -94,19 +94,19 @@ public class QueryBuilderTests
         world.Component<Position>();
         world.Component<Velocity>();
 
-        world.QueryBuilder()
+        Query q1 = world.QueryBuilder()
             .Cached()
             .With<Position>()
             .TermAt<Position>(0)
             .Build();
 
-        world.QueryBuilder()
+        Query q2 = world.QueryBuilder()
             .Cached()
             .With<Tag, Position>()
             .TermAt<Position>(0)
             .Build();
 
-        world.QueryBuilder()
+        Query q3 = world.QueryBuilder()
             .Cached()
             .With<Tag>().Second<Position>()
             .TermAt<Position>(0)
@@ -129,6 +129,13 @@ public class QueryBuilderTests
                 .TermAt<Position>(0)
                 .Build();
         });
+
+        // Flecs 4.1 asserts when a PairIsTag trait is added to a relationship
+        // while cached queries that match its pairs are still alive, so clean
+        // up the queries from above first.
+        q1.Dispose();
+        q2.Dispose();
+        q3.Dispose();
 
         Assert.Throws<Ecs.AssertionException>(() =>
         {
