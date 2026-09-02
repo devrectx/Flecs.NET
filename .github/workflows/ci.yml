@@ -144,7 +144,15 @@ jobs:
 
       - name: Run Tests
         shell: bash
-        run: dotnet test -p:SkipNatives=true
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            echo "--- dylib inventory ---"
+            find src -name '*.dylib' -not -path '*/.zig-cache/*' -exec file {} \;
+            echo "--- test output ---"
+            ls -la src/Flecs.NET.Tests/bin/Debug/net10.0/ | grep -i flecs || echo "no flecs in test output"
+            ls -la src/Flecs.NET.Tests/bin/Debug/net10.0/runtimes/ 2>/dev/null || echo "no runtimes dir"
+          fi
+          dotnet test -p:SkipNatives=true
 
       - name: Pack Nuget Packages
         shell: bash
