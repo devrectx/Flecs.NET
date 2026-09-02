@@ -525,7 +525,18 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
         Desc.query = QueryBuilder.Desc;
 
         fixed (ecs_system_desc_t* ptr = &Desc)
-            return new System_(World, ecs_system_init(World, ptr));
+        {
+            // If the entity is already a system (for example when a builder is
+            // created with a name that resolves to an existing system) update
+            // it in place instead of creating a new one. Flecs 4.1 aborts when
+            // ecs_system_init() is called on an entity that is already a
+            // system.
+            ulong system = Desc.entity != 0 && ecs_has_id(World, Desc.entity, EcsSystem)
+                ? ecs_system_update(World, Desc.entity, ptr)
+                : ecs_system_init(World, ptr);
+
+            return new System_(World, system);
+        }
     }
 
     System_ IQueryBuilder<SystemBuilder, System_>.Build()
